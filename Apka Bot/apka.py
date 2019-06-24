@@ -37,8 +37,28 @@ class Apka:
         
 account = Apka()
 response = account.signIn()
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+characters = account.chars()
+#just checking if i can edit
+=======
+<<<<<<< HEAD
+characters = account.chars()
+#just checking if i can edit
+=======
+>>>>>>> parent of 0323933... making code human-readable xd
+>>>>>>> wtf
 chars = account.chars()
 
 print(response.cookies, "\n")
 chars = list(zip(chars.name, chars.id))
 print(chars)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 0186a6ee7b5e831803623e31a440dce798b8c421
+>>>>>>> parent of 0323933... making code human-readable xd
+#stop updating now xd
+>>>>>>> wtf
