@@ -50,20 +50,32 @@ class Apka:
         """A function that returns a list of characters in a user's account. 
         It takes them from the response of signIn function"""
         
-        import re
+        import json
+        import requests
 
-        characters = re.findall(r"option label=\"(.*?)\" value=\"(.*?)\"", response.text)
-        for char in characters:
+        id, server, nick = [], [], []
 
-            Character_List = Characters()
-            Character_List.name.append(char[0])
-            Character_List.id.append(char[1])
+        data = requests.post("http://www.margonem.pl/ajax/getplayerdata.php?app_version=1.3.3", cookies = response.cookies)
+        accounts = json.loads(data.text)
 
-        return Character_List
+        for char in accounts['charlist']:
+
+            info = accounts['charlist'][char]
+            world = (info['db'])[1:]
+
+            id.append(info['id'])
+            server.append(world)
+            nick.append(info['nick'])
+            
+        characters = list(zip(id,server,nick))
+        return characters
 
         
 account = Apka()
 response = account.signIn()
 
 chars = account.chars()
-chars = list(zip(chars.name, chars.id))
+
+#only for test
+for i in chars:
+    print(i)
