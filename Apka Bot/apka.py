@@ -6,7 +6,6 @@ class Characters:
 class Apka:
     
     import hashlib
-
     username = input("Podaj login: ").encode('ascii')
     password = input("Podaj hasło: ").encode('ascii')
 
@@ -16,7 +15,6 @@ class Apka:
     def signIn(self, username = username, ph=hashed_password):
 
         import requests
-
         response = requests.post("https://www.margonem.pl/ajax/logon.php?t=login", data = {
             'l': username,
             'ph': ph
@@ -32,7 +30,6 @@ class Apka:
 
         import re
         characters = re.findall(r"option label=\"(.*?)\" value=\"(.*?)\"", response.text)
-
         for char in characters:
 
             Character_List = Characters()
@@ -41,6 +38,7 @@ class Apka:
 
         return Character_List
 
+        
 account = Apka()
 response = account.signIn()
 <<<<<<< HEAD
