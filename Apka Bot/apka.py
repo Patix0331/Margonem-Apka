@@ -1,22 +1,8 @@
 class Apka:
-    
-    from hashlib import sha1
 
-    username = input("Podaj login: ").encode('ascii')
-    password = input("Podaj hasło: ").encode('ascii')
-
-    hashed_password = sha1(b"mleczko"+password).hexdigest()
-
-    def signIn(self, username = username, ph=hashed_password):
+    def signIn(self):
         """Return response of log in post request
         Take default values from user input.
-
-        Parameters
-        ----------
-        username : bytes
-            Username entered by the user
-        ph : bytes
-            hashed 'mleczko'+password entered by the user with sha1 method
         
         Raises
         ------
@@ -28,11 +14,18 @@ class Apka:
         response
             response of login post request
         """
+
+        from requests import post
+        from hashlib import sha1
         
-        import requests
-        response = requests.post("https://www.margonem.pl/ajax/logon.php?t=login", data = {
-            'l': username,
-            'ph': ph
+        _username = input("Podaj login: ").encode('ascii')
+        _password = input("Podaj hasło: ").encode('ascii')
+
+        _ph = sha1(b"mleczko"+_password).hexdigest()
+
+        response = post("https://www.margonem.pl/ajax/logon.php?t=login", data = {
+            'l': _username,
+            'ph': _ph
         })
 
         if("logged" in str(response.content)):
@@ -45,24 +38,12 @@ class Apka:
         """A function that returns a list of characters in a user's account. 
         It takes them from the response of signIn function"""
         
-        import json
-        import requests
+        from requests import post
+        from re import findall
 
-        _id, _server, _nick = [], [], []
+        data = post("http://www.margonem.pl/ajax/getplayerdata.php?app_version=1.3.3", cookies = response.cookies)
+        characters = findall(r'id":"(.*?)","nick":"(.*?)".*?"db":"#(.*?)"', data.text)
 
-        data = requests.post("http://www.margonem.pl/ajax/getplayerdata.php?app_version=1.3.3", cookies = response.cookies)
-        accounts = json.loads(data.text)
-
-        for char in accounts['charlist']:
-
-            info = accounts['charlist'][char]
-            world = (info['db'])[1:]
-
-            _id.append(info['id'])
-            _server.append(world)
-            _nick.append(info['nick'])
-            
-        characters = list(zip(_id,_server,_nick))
         return characters
 
         
