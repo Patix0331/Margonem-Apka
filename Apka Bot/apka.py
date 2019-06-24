@@ -5,15 +5,35 @@ class Characters:
 
 class Apka:
     
-    import hashlib
+    from hashlib import sha1
+
     username = input("Podaj login: ").encode('ascii')
     password = input("Podaj hasło: ").encode('ascii')
 
-    hash = hashlib.sha1
-    hashed_password = hash(b"mleczko"+password).hexdigest()
+    hashed_password = sha1(b"mleczko"+password).hexdigest()
 
     def signIn(self, username = username, ph=hashed_password):
+        """Return response of log in post request
+        Take default values from user input.
 
+        Parameters
+        ----------
+        username : bytes
+            Username entered by the user
+        ph : bytes
+            hashed 'mleczko'+password entered by the user with sha1 method
+        
+        Raises
+        ------
+        Exception
+            Error with request login
+
+        Returns
+        -------
+        response
+            response of login post request
+        """
+        
         import requests
         response = requests.post("https://www.margonem.pl/ajax/logon.php?t=login", data = {
             'l': username,
@@ -27,8 +47,11 @@ class Apka:
             raise Exception
 
     def chars(self):
-        import re
+        """A function that returns a list of characters in a user's account. 
+        It takes them from the response of signIn function"""
         
+        import re
+
         characters = re.findall(r"option label=\"(.*?)\" value=\"(.*?)\"", response.text)
         for char in characters:
 
@@ -41,8 +64,6 @@ class Apka:
         
 account = Apka()
 response = account.signIn()
-chars = account.chars()
 
-print(response.cookies, "\n")
+chars = account.chars()
 chars = list(zip(chars.name, chars.id))
-print(chars)
