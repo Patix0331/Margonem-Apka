@@ -1,14 +1,14 @@
 class Apka:
     import hashlib
-    login = input("Podaj login: ").encode('ascii')
+    username = input("Podaj login: ").encode('ascii')
     password = input("Podaj hasło: ").encode('ascii')
     hash = hashlib.sha1
     hashed_password = hash(b"mleczko"+password).hexdigest()
 
-    def loging(self, login=login, ph=hashed_password):
+    def signIn(self, username = username, ph=hashed_password):
         import requests
         response = requests.post("https://www.margonem.pl/ajax/logon.php?t=login", data = {
-            'l': login,
+            'l': username,
             'ph': ph
         })
         if("logged" in str(response.content)):
@@ -16,6 +16,11 @@ class Apka:
         else:
             raise Exception
 
-log = Apka()
-response = log.loging()
-print(response.cookies)
+    def chars(self):
+            import re
+            characters = re.findall(r"option label=\"(.*?)\" value=\"(.*?)\"", response.text)
+            return characters
+
+account = Apka()
+response = account.signIn()
+characters = account.chars()
