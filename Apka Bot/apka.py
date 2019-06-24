@@ -27,8 +27,8 @@ class Apka:
             raise Exception
 
     def chars(self):
-
         import re
+        
         characters = re.findall(r"option label=\"(.*?)\" value=\"(.*?)\"", response.text)
         for char in characters:
 
@@ -41,13 +41,8 @@ class Apka:
         
 account = Apka()
 response = account.signIn()
-characters = account.chars()
-#just checking if i can edit
 chars = account.chars()
 
 print(response.cookies, "\n")
 chars = list(zip(chars.name, chars.id))
-
-print(response.cookies, "\n")
 print(chars)
-#stop updating now xd
