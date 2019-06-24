@@ -42,4 +42,3 @@ chars = account.chars()
 print(response.cookies, "\n")
 chars = list(zip(chars.name, chars.id))
 print(chars)
-#commit
