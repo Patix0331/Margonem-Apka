@@ -54,4 +54,4 @@ chars = account.chars()
 
 #only for test
 for i in chars:
-    print(i)
+    print(i[1] + "(" + i[2] + ") - " + i[0])
