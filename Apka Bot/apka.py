@@ -2,6 +2,7 @@ class Characters:
     
     name = []
     id = []
+
 class Apka:
     
     import hashlib
@@ -12,16 +13,19 @@ class Apka:
     hashed_password = hash(b"mleczko"+password).hexdigest()
 
     def signIn(self, username = username, ph=hashed_password):
+
         import requests
         response = requests.post("https://www.margonem.pl/ajax/logon.php?t=login", data = {
             'l': username,
             'ph': ph
         })
+
         if("logged" in str(response.content)):
             return response
 
         else:
             raise Exception
+
     def chars(self):
 
         import re
@@ -37,8 +41,13 @@ class Apka:
         
 account = Apka()
 response = account.signIn()
+characters = account.chars()
+#just checking if i can edit
 chars = account.chars()
 
 print(response.cookies, "\n")
 chars = list(zip(chars.name, chars.id))
+
+print(response.cookies, "\n")
 print(chars)
+#stop updating now xd
