@@ -1,8 +1,3 @@
-class Characters:
-    
-    name = []
-    id = []
-
 class Apka:
     
     from hashlib import sha1
