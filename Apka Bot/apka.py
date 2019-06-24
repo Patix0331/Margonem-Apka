@@ -48,7 +48,7 @@ class Apka:
         import json
         import requests
 
-        id, server, nick = [], [], []
+        _id, _server, _nick = [], [], []
 
         data = requests.post("http://www.margonem.pl/ajax/getplayerdata.php?app_version=1.3.3", cookies = response.cookies)
         accounts = json.loads(data.text)
@@ -58,11 +58,11 @@ class Apka:
             info = accounts['charlist'][char]
             world = (info['db'])[1:]
 
-            id.append(info['id'])
-            server.append(world)
-            nick.append(info['nick'])
+            _id.append(info['id'])
+            _server.append(world)
+            _nick.append(info['nick'])
             
-        characters = list(zip(id,server,nick))
+        characters = list(zip(_id,_server,_nick))
         return characters
 
         
