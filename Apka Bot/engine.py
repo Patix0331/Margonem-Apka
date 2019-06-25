@@ -16,6 +16,7 @@ class Engine:
         Returning info of character
         """
 
+        useToken = True
         url = "http://{}.margonem.pl/engine?t=init&initlvl={}&mobile=1&mobile_token={}".format(server, level, self._characterToken)
 
         cookies = apka.cookies
@@ -33,8 +34,7 @@ class Engine:
 
             if mobile_token:
                 salt = "humantorch-".encode('utf-8')
-                _characterToken = md5(salt+mobile_token[1].encode('utf-8')).hexdigest()
-                print("MobileToken = ",_characterToken)
+                self._characterToken = md5(salt+mobile_token[1].encode('utf-8')).hexdigest()
 
             else:
                 print("Error: Postać jest zarejestrowana na innym świecie!")
@@ -44,7 +44,7 @@ class Engine:
             timestamp = re.match('{\n  "ev": (.*?),', data.text)
 
             if timestamp:
-                _characterEvent = timestamp[1]
+                self._characterEvent = timestamp[1]
 
         return data
 
@@ -63,11 +63,22 @@ class Engine:
 
         timestamp = re.match('{\n  "ev": (.*?),', data.text)
         if timestamp:
-            _characterEvent = timestamp[1]
+            self._characterEvent = timestamp[1]
             return True
         return False
 
 if __name__ == "__main__":
     engine = Engine()
-    print(engine.Initialize("aldous", apka.chars[0][0], 1).text)
-    print(engine._characterToken)
+
+    data = engine.Initialize("aldous", apka.chars[0][0], 1)
+    #print("\n\nOdpowiedz kurwa z lvl 1: \n\n", data.text)
+
+    data = engine.Initialize("aldous", apka.chars[0][0], 2)
+    #print("\n\nOdpowiedz kurwa z lvl 2: \n\n", data.text)
+
+    data = engine.Initialize("aldous", apka.chars[0][0], 3)
+    #print("\n\nOdpowiedz kurwa z lvl 3: \n\n", data.text)
+
+    data = engine.Initialize("aldous", apka.chars[0][0], 4)
+    #print("\n\nOdpowiedz kurwa z lvl 4: \n\n", data.text)
+        
