@@ -42,15 +42,16 @@ class Apka:
         from re import findall
 
         data = post("http://www.margonem.pl/ajax/getplayerdata.php?app_version=1.3.3", cookies = response.cookies)
-        characters = findall(r'id":"(.*?)","nick":"(.*?)".*?"db":"#(.*?)"', data.text)
+        characters = findall(r'id":"(.*?)","nick":"(.*?)".*?"poziom":"(.*?)".*?"prof":"(.*?)".*?"db":"#(.*?)".*?"stamina":"(.*?)"', data.text)
+        print(data.text)
         return characters
 
 
 account = Apka()
 response = account.signIn()
 chars = account.chars()
-
 #only for test
+#chars: 0 - id, 1 - nick, 2 - lvl, 3 - prof, 4 - world, 5 - stamina
 if __name__ == "__main__":
     for i in chars:
-        print(i[1] + " (" + i[2] + ") - " + i[0])
+        print(i[1] + " (" + i[2] + i[3] + ") [" + i[4] + "] - " + i[0] +" pozostało " + i[5] + " staminy")
