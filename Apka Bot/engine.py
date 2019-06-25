@@ -32,7 +32,7 @@ if level == 1:
         raise Exception
 
 if level == 4:
-    timestamp = re.match("\"ev\": (.*?),", data.text) # CZEMU TO KURWA NIE DZIALA???
+    timestamp = re.match('{\n  "ev": (.*?),', data.text) # CZEMU TO KURWA NIE DZIALA???
     if timestamp:
         _characterEvent = timestamp[1]
 
@@ -40,8 +40,7 @@ print("Token = ", _characterToken)
 print("Event = ", _characterEvent)
 
 data = post("http://{}.margonem.pl/engine?t=_&aid={}&mobile=1&mobile_token={}".format(_server, _id, _characterToken), headers=headers, cookies=cookies)
-
-timestamp = re.match('"ev": "(.*?)"', data.text)
+timestamp = re.match('{\n  "ev": (.*?),', data.text)
 if timestamp:
     _characterEvent = timestamp[1]
 print("Event2 = ",_characterEvent)
