@@ -18,7 +18,7 @@ class Engine:
 
         url = "http://{}.margonem.pl/engine?t=init&initlvl={}&mobile=1&mobile_token={}".format(server, level, self._characterToken)
 
-        cookies = apka.response.cookies
+        cookies = apka.cookies
         cookies.set("mchar_id", characterId)
 
         headers = {
@@ -56,7 +56,7 @@ class Engine:
             "X-Unity-Version":"5.6.2p4"
         }
 
-        cookies = apka.response.cookies
+        cookies = apka.cookies
         cookies.set("mchar_id", self._id)
 
         data = post("http://{}.margonem.pl/engine?t=_&aid={}&mobile=1&mobile_token={}".format(self._server, self._id, self._characterToken), headers=headers, cookies=cookies)
@@ -69,5 +69,5 @@ class Engine:
 
 if __name__ == "__main__":
     engine = Engine()
-    engine.Initialize("aldous", apka.chars[0][0], 1)
+    print(engine.Initialize("aldous", apka.chars[0][0], 1).text)
     print(engine._characterToken)

@@ -46,14 +46,14 @@ class Apka:
         return characters
 
 
-
+account = Apka()
+cookies = account.signIn()
+chars = account.chars(cookies)
 #only for test
 #chars: 0 - id, 1 - nick, 2 - lvl, 3 - prof, 4 - world, 5 - stamina
 if __name__ == "__main__":
 
-    account = Apka()
-    cookies = account.signIn()
-    chars = account.chars(cookies)
+    
     
     for i in chars:
         print(i[1] + " (" + i[2] + i[3] + ") [" + i[4] + "] - " + i[0] +" pozostało " + i[5] + " staminy")
