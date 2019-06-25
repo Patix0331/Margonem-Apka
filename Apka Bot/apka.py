@@ -1,5 +1,5 @@
+import player
 class Apka:
-
     def signIn(self):
         """Return response of log in post request
         Take default values from user input.
@@ -29,29 +29,31 @@ class Apka:
         })
 
         if("logged" in str(response.content)):
-            return response
+            return response.cookies
 
         else:
             raise Exception
 
-    def chars(self):
+    def chars(self, cookies):
         """A function that returns a list of characters in a user's account. 
         It takes them from the response of signIn function"""
         
         from requests import post
         from re import findall
 
-        data = post("http://www.margonem.pl/ajax/getplayerdata.php?app_version=1.3.3", cookies = response.cookies)
+        data = post("http://www.margonem.pl/ajax/getplayerdata.php?app_version=1.3.3", cookies = cookies)
         characters = findall(r'id":"(.*?)","nick":"(.*?)".*?"poziom":"(.*?)".*?"prof":"(.*?)".*?"db":"#(.*?)".*?"stamina":"(.*?)"', data.text)
-        print(data.text)
         return characters
 
 
-account = Apka()
-response = account.signIn()
-chars = account.chars()
+
 #only for test
 #chars: 0 - id, 1 - nick, 2 - lvl, 3 - prof, 4 - world, 5 - stamina
 if __name__ == "__main__":
+
+    account = Apka()
+    cookies = account.signIn()
+    chars = account.chars(cookies)
+    
     for i in chars:
         print(i[1] + " (" + i[2] + i[3] + ") [" + i[4] + "] - " + i[0] +" pozostało " + i[5] + " staminy")
