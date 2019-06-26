@@ -42,18 +42,17 @@ class Apka:
         from re import findall
 
         data = post("http://www.margonem.pl/ajax/getplayerdata.php?app_version=1.3.3", cookies = cookies)
-        characters = findall(r'id":"(.*?)","nick":"(.*?)".*?"poziom":"(.*?)".*?"prof":"(.*?)".*?"db":"#(.*?)".*?"stamina":"(.*?)"', data.text)
+        characters = findall(r'id":"(.*?)","nick":"(.*?)".*?"poziom":"(.*?)".*?"prof":"(.*?)".*?"db":"#(.*?)".*?"stamina":(.*?)}', data.text)
         return characters
 
 
 account = Apka()
-cookies = account.signIn()
-chars = account.chars(cookies)
+#in case of multiple accounts object renamed cookies - > cookies1 and chars - > chars1
+cookies1 = account.signIn() 
+chars1 = account.chars(cookies1)
 #only for test
 #chars: 0 - id, 1 - nick, 2 - lvl, 3 - prof, 4 - world, 5 - stamina
 if __name__ == "__main__":
-
     
-    
-    for i in chars:
+    for i in chars1:
         print(i[1] + " (" + i[2] + i[3] + ") [" + i[4] + "] - " + i[0] +" pozostało " + i[5] + " staminy")
