@@ -13,6 +13,7 @@ class Engine:
     character = apka.chars1[charnumber] #todo: choose character menu #
     _server = character[4]
     _id = character[0]
+    _stamina = 50
     print("Wybrałeś postać: " + character[1] + " (" + character[2] + character[3] + ") [" + _server + "]")
 
     _cookies = apka.cookies1
@@ -71,28 +72,51 @@ class Engine:
         #   return True
         #return False
         return data
-    def StartFight(self, town):
+    def Fight(self, town):
+
         self.town = town
         headers = Engine._headers
         cookies = Engine._cookies
         cookies.set("mchar_id", self._id)
+
         currentTime = time.time()
-        #initiating fight:
+
         attackmanual = post("http://{}.margonem.pl/engine?t=fight&a=attack&town_id={}&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self.town, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=cookies)
-        time.sleep(0.1)
+        
+        stamina = re.search(r'"stamina": (.*?),', attackmanual.text)
+        if stamina:
+            self._stamina = stamina[1]
+            
+        print("Start fight.", attackmanual.text)
+        print("\n\nStamina left: ", stamina[1])
+        time.sleep(1)
+
+        self.AutoMode()
+        
+        
+    def AutoMode(self):
+
+        headers = Engine._headers
+        cookies = Engine._cookies
+        cookies.set("mchar_id", self._id)
+
         currentTime = time.time()
-        #fight in auto-mode
         turnAutoMode = post("http://{}.margonem.pl/engine?t=fight&a=f&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=cookies)
-        return turnAutoMode
+        
+        time.sleep(1)
+        self.QuitFight()
+
     def QuitFight(self):
+
         headers = Engine._headers
         cookies = Engine._cookies
         cookies.set("mchar_id", self._id)
         currentTime = time.time()
         #quit pending fight
         quitCurrentFight = post("http://{}.margonem.pl/engine?t=fight&a=quit&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=cookies)
-        return quitCurrentFight
+        print("\nZakończenie walki")
 
+        time.sleep(1)
 
         
 #initialize should be available from bot.py
@@ -105,16 +129,9 @@ if __name__ == "__main__":
 afterlogin = engine.RefreshEvent()
     #print(afterlogin.text)
 #just for tests. 
-ilestaminy = 10
-for i in range(1, ilestaminy):
-    waitTime = 0.2
-    fight = engine.StartFight("2675")
-    time.sleep(waitTime)
-    afterfight = engine.RefreshEvent()
-    time.sleep(waitTime)
-    quitfight = engine.QuitFight()
-    afterfight = engine.RefreshEvent()
-    time.sleep(waitTime)
+for i in range(1, 3):
+    engine.Fight("2675")
+
 stoptime = time.time()
 worktime = round(stoptime - starttime, 2)
-print("Zbicie " + str(ilestaminy) + " staminy zajęło " + str(worktime) + "s")
+print("Zbicie staminy zajęło " + str(worktime) + "s")

@@ -18,14 +18,14 @@ class Apka:
         from requests import post
         from hashlib import sha1
         
-        #_username = input("Podaj login: ").encode('ascii')
-        #_password = input("Podaj hasło: ").encode('ascii')
+        _username = input("Podaj login: ").encode('ascii')
+        _password = input("Podaj hasło: ").encode('ascii')
 
-        #_ph = sha1(b"mleczko"+_password).hexdigest()
+        _ph = sha1(b"mleczko"+_password).hexdigest()
 
         response = post("https://www.margonem.pl/ajax/logon.php?t=login", data = {
-            'l':'apkabot', #_username,
-            'ph':'96f78d46bc3169599bffc3cdd16e2d843f31c55d' #_ph
+            'l':_username,
+            'ph':_ph
         })
 
         if("logged" in str(response.content)):
