@@ -33,6 +33,7 @@ class Apka:
 
         else:
             raise Exception
+            print("BŁĘDNE DANE LOGOWANIA")
 
     def chars(self, cookies):
         """A function that returns a list of characters in a user's account. 

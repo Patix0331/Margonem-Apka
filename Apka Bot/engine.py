@@ -40,7 +40,10 @@ class Engine:
                 Engine._CharIterator = 0
 
             character = apka.chars1[Engine._charnumbers[Engine._CharIterator]]
-            Engine._server = character[4]
+            if Engine._server == character[4]:
+                time.sleep(5)
+            else:
+                Engine._server = character[4]
             Engine._id = character[0]
 
             Engine._cookies.set("mchar_id", self._id)
@@ -60,7 +63,7 @@ class Engine:
         url = "http://{}.margonem.pl/engine?t=init&initlvl={}&mobile=1&mobile_token={}".format(self._server, self.level, self._characterToken)
 
         data = post(url, headers=Engine._headers, cookies = Engine._cookies)
-        print(data.text)
+        print("INITIALIZE" + str(self.level) + data.text)
         if level == 1:
             mobile_token = re.match('{\n  "mobile_token": "(.*?)"', data.text)
 
@@ -76,13 +79,13 @@ class Engine:
                 if waitFor[1] == "Poczekaj...":
                     print("waitfor5s")
                     time.sleep(10)
-                    data = post(url, headers=Engine._headers, cookies = Engine._cookies)
+                    self.Initialize(1)
                     print(data.text)
 
                 elif waitFor[1] == "Twoja":
                     print("waitfor30s")
                     time.sleep(30)
-                    data = post(url, headers=Engine._headers, cookies = Engine._cookies)
+                    self.Initialize(1)
                     print("fucking podział łupów") #or pending fight (idk how)
                 else:
                     print("waitfor, idk for what")
@@ -113,7 +116,7 @@ class Engine:
         currentTime = time.time()
 
         attackmanual = post("http://{}.margonem.pl/engine?t=fight&a=attack&town_id={}&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self.town, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
-        print(attackmanual.text)
+        #print(attackmanual.text)
         reload = re.match('{\n  "e": "Błąd wewnętrzny: Pominięty pakiet danych inicjujących"', attackmanual.text)
         if reload:
             print('znalazlem bleda')
@@ -134,6 +137,7 @@ class Engine:
         
     def AutoMode(self):
 
+
         currentTime = time.time()
         turnAutoMode = post("http://{}.margonem.pl/engine?t=fight&a=f&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
         
@@ -145,7 +149,7 @@ class Engine:
         #quit pending fight
         quitCurrentFight = post("http://{}.margonem.pl/engine?t=fight&a=quit&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
         #print("\nZakończenie walki" + quitCurrentFight.text)
-
+        self.RefreshEvent()
         time.sleep(0.2)
         if self._stamina != 0 and self._stamina != "0":
             self.Fight("2675")
