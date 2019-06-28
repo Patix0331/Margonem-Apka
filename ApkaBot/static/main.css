@@ -1,0 +1,197 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  justify-items: center;
+  min-height: 100vh;
+  background: #181818;
+  color: grey;
+      grid-template-areas: "header header header" "main main main" "footer footer footer";
+  -ms-grid-rows: 4em auto 3em;
+      grid-template-rows: 4em auto 3em;
+  -ms-grid-columns: auto;
+      grid-template-columns: auto;
+}
+
+header {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 3;
+  grid-area: header;
+  width: 100%;
+  margin-top: 1em;
+}
+
+header nav {
+  background: purple;
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  width: 100%;
+  height: 3em;
+}
+
+header nav li {
+  display: inline;
+  margin-left: 2em;
+  width: 12em;
+}
+
+header nav li a {
+  text-decoration: none;
+  color: black;
+}
+
+main {
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 3;
+  grid-area: main;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+main .alert {
+  background: #1b1b1b;
+  position: absolute;
+  top: 5em;
+  padding: 1em;
+  border: 2px solid purple;
+  border-radius: 1em;
+  color: grey;
+}
+
+main #alert-success {
+  color: green;
+  border-color: green;
+}
+
+main #alert-danger {
+  color: #580000;
+  border-color: #580000;
+}
+
+main a {
+  text-decoration: none;
+  color: grey;
+}
+
+main .login {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background: #121212;
+  border: none;
+  border-radius: 1em;
+}
+
+main .login .invalid-feedback, main .login .is-invalid {
+  color: #580000;
+}
+
+main .login #remember {
+  width: 25px;
+}
+
+main .login .form-check {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 1em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+main .login input {
+  border-radius: 0.3em;
+  height: 2em;
+  width: 100%;
+  text-align: center;
+  border: none;
+  background: #1d1d1d;
+  color: white;
+}
+
+main .login legend {
+  color: #ff00f7;
+  margin: 0 1em 0.5em 0.2em;
+  font-size: 2em;
+}
+
+main .login .form {
+  margin: 0 2em 0 2em;
+}
+
+main .login input[type=submit] {
+  background: #ff00f7;
+  color: black;
+  font-size: 1em;
+  text-shadow: 0 0 10px black;
+  cursor: pointer;
+  margin-top: 1.5em;
+  border-radius: 0 0 1em 1em;
+}
+
+main .login input[type=submit]:hover {
+  background: purple;
+  color: white;
+  text-shadow: none;
+}
+
+main .login input:focus:required:invalid {
+  border: 2px solid #580000;
+  background: #580000;
+}
+
+main .login input:required:valid {
+  border: 2px solid green;
+}
+
+footer {
+  -ms-grid-row: 3;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 3;
+  grid-area: footer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: black;
+  background: purple;
+  border-top: 2px solid purple;
+}
+/*# sourceMappingURL=main.css.map */

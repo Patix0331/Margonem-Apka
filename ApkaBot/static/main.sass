@@ -1,0 +1,136 @@
+$background-body: #181818
+$background-form: #121212
+$purple: #ff00f7
+$invalid: #580000
+
+*,*::before,*::after
+    margin: 0
+    padding: 0
+    box-sizing: border-box
+
+body
+    display: grid
+    align-items: center
+    justify-items: center
+    min-height: 100vh
+    background: $background-body
+    color: grey
+    grid-template-areas: "header header header" "main main main" "footer footer footer"
+    grid-template-rows: 4em auto 3em
+    grid-template-columns: auto
+
+header
+    grid-area: header
+    width: 100%
+    margin-top: 1em
+
+    nav 
+        background: purple
+        position: fixed
+        display: flex
+        align-items: center
+        justify-content: space-around
+        width: 100%
+        height: 3em
+        li 
+            display: inline
+            margin-left: 2em
+            width: 12em
+            a 
+                text-decoration: none
+                color: black
+
+main 
+    grid-area: main
+    align-items: center
+    display: flex
+    justify-content: center
+
+    .alert
+        background: #1b1b1b
+        position: absolute
+        top: 5em
+        padding: 1em
+        border: 2px solid purple
+        border-radius: 1em
+        color: grey
+    
+    #alert-success
+        color: green
+        border-color: green
+
+    #alert-danger
+        color: $invalid
+        border-color: $invalid
+
+    a
+        text-decoration: none
+        color: grey
+
+    .login
+        display: flex
+        flex-direction: column 
+        background: $background-form
+        border: none
+        border-radius: 1em
+
+        .invalid-feedback, .is-invalid
+            color: $invalid
+
+        #remember
+            width: 25px
+
+        .form-check 
+            align-items: center
+            margin-top: 1em
+            display: flex
+
+        input
+            border-radius: 0.3em
+            height: 2em
+            width: 100%
+            text-align: center
+            border: none
+            background: #1d1d1d
+            color: white
+
+        legend
+            color: $purple
+            margin: 0 1em 0.5em 0.2em
+            font-size: 2em
+
+        .form
+            margin: 0 2em 0 2em
+
+        input[type=submit]
+            background: $purple
+            color: black
+            font-size: 1em
+            text-shadow: 0 0 10px black
+            cursor: pointer
+            margin-top: 1.5em
+            border-radius: 0 0 1em 1em
+
+        input[type=submit]:hover
+            background: purple
+            color: white
+            text-shadow: none
+
+
+        input:focus:required:invalid 
+            border: 2px solid $invalid
+            background: $invalid
+
+        input:required:valid
+            border: 2px solid green
+
+footer
+    grid-area: footer
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 100%
+    height: 100%
+    color: black
+    background: purple
+    border-top: 2px solid purple
