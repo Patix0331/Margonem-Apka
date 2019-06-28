@@ -83,7 +83,7 @@ class Engine:
                     print("waitfor30s")
                     time.sleep(30)
                     data = post(url, headers=Engine._headers, cookies = Engine._cookies)
-                    print("fucking podział łupów") #
+                    print("fucking podział łupów") #or pending fight (idk how)
                 else:
                     print("waitfor, idk for what")
         if level == 4:
@@ -123,7 +123,7 @@ class Engine:
             print("\n\nStamina left: ", self._stamina)
             if self._stamina == 0 or self._stamina == "0":
                     time.sleep(0.2)
-                    self.AutoMode()
+                    self.AutoMode() #fight is still not closed after that, FIX NEEDED
                     time.sleep(0.2)
                     self.ChangeChar()
         
