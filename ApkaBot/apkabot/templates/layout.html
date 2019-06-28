@@ -6,9 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
     {% if title %}
-        <title>ChujeMuje - {{ title }}</title>
+        <title>ApkaBot - {{ title }}</title>
     {% else %}
-        <title>ChujeMuje</title>
+        <title>ApkaBot</title>
     {% endif %}
 
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
@@ -21,8 +21,13 @@
                 <li><a href="{{ url_for('home') }}">Home</a></li>
             </div>
             <div>
-                <li><a href="{{ url_for('login') }}">Logowanie</a></li>
-                <li><a href="{{ url_for('register') }}">Rejestracja</a></li>
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('acc') }}">Konto</a></li>
+                    <li><a href="{{ url_for('logout') }}">Wyloguj się</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Logowanie</a></li>
+                    <li><a href="{{ url_for('register') }}">Rejestracja</a></li>
+                {% endif %}
             </div>
         </nav>
     </header>

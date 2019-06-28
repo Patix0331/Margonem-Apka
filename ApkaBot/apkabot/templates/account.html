@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block content %}
+<div id=info>
+    <h1>{{ current_user.username }}</h1>
+    <h2>{{ current_user.email }}</h2>
+</div>
+<div id="add-acc">
+    <form method="post" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="login">
+            <legend>Dodaj konto</legend>
+            <div class="form">
+                <p>Wklej to na swój profil: <b>{{ auth }}</b></p>
+                <div class="form-group">
+                    {{ form.profile.label(class="form-control-label") }}
+                    {% if form.profile.errors %}  
+
+                        {{ form.profile(class="form-control-label is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.profile.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.profile(type="url", class="form-control form-control-lg", minlength="42", maxlength="49", size=30, placeholder="https://www.margonem.pl/?task=profile&id=1234567") }}
+                    {% endif %} 
+                </div>
+            </div>
+            <input type="submit" value="Dodaj!">
+        </fieldset>
+    </form>
+</div>
+<div id="acc-list">
+    <h2>Lista podpiętych kont:</h2><br>
+    <table>
+        <tr>
+            <th>User_id</th>
+            <th>Link</th> 
+            <th>Licencja do</th>
+        </tr>
+        {% for acc in acc_list %}
+        <tr>
+            <th>{{acc.user_id}}</th>
+            <th><a href="{{acc.url}}">profil</a></th>
+            <th>{{acc.license.strftime('%Y-%m-%d %H:%M')}}</th>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock content %}

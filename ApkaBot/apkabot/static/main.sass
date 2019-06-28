@@ -1,12 +1,13 @@
 $background-body: #181818
 $background-form: #121212
 $purple: #ff00f7
-$invalid: #580000
+$invalid: #980000
 
 *,*::before,*::after
     margin: 0
     padding: 0
     box-sizing: border-box
+    text-shadow: 0 0 0.5em black
 
 body
     display: grid
@@ -42,9 +43,11 @@ header
 
 main 
     grid-area: main
+    width: 100%
+    height: 100%
     align-items: center
     display: flex
-    justify-content: center
+    justify-content: space-around
 
     .alert
         background: #1b1b1b
@@ -75,7 +78,7 @@ main
         border-radius: 1em
 
         .invalid-feedback, .is-invalid
-            color: $invalid
+            color: #980000
 
         #remember
             width: 25px
@@ -134,3 +137,14 @@ footer
     color: black
     background: purple
     border-top: 2px solid purple
+
+#acc-list
+    display: flex
+    flex-direction: column
+    width: 33%
+    height: 50%
+    justify-content: center
+    text-align: center
+
+    #play
+        margin: 4em

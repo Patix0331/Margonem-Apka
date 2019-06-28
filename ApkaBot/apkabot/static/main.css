@@ -3,6 +3,7 @@
   padding: 0;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  text-shadow: 0 0 0.5em black;
 }
 
 body {
@@ -62,15 +63,16 @@ main {
   -ms-grid-column: 1;
   -ms-grid-column-span: 3;
   grid-area: main;
+  width: 100%;
+  height: 100%;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
 }
 
 main .alert {
@@ -89,8 +91,8 @@ main #alert-success {
 }
 
 main #alert-danger {
-  color: #580000;
-  border-color: #580000;
+  color: #980000;
+  border-color: #980000;
 }
 
 main a {
@@ -112,7 +114,7 @@ main .login {
 }
 
 main .login .invalid-feedback, main .login .is-invalid {
-  color: #580000;
+  color: #980000;
 }
 
 main .login #remember {
@@ -166,8 +168,8 @@ main .login input[type=submit]:hover {
 }
 
 main .login input:focus:required:invalid {
-  border: 2px solid #580000;
-  background: #580000;
+  border: 2px solid #980000;
+  background: #980000;
 }
 
 main .login input:required:valid {
@@ -193,5 +195,25 @@ footer {
   color: black;
   background: purple;
   border-top: 2px solid purple;
+}
+
+#acc-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 33%;
+  height: 50%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+
+#acc-list #play {
+  margin: 4em;
 }
 /*# sourceMappingURL=main.css.map */
