@@ -50,9 +50,10 @@ account = Apka()
 #in case of multiple accounts object renamed cookies - > cookies1 and chars - > chars1
 cookies1 = account.signIn() 
 chars1 = account.chars(cookies1)
+print(cookies1)
 #only for test
 #chars: 0 - id, 1 - nick, 2 - lvl, 3 - prof, 4 - world, 5 - stamina
-if __name__ == "__main__":
-    
-    for i in chars1:
-        print(i[1] + " (" + i[2] + i[3] + ") [" + i[4] + "] - " + i[0] +" pozostało " + i[5] + " staminy")
+c = 0
+for i in chars1:
+    print(i[1] + " (" + i[2] + i[3] + ") [" + i[4] + "] - " + i[0] +" pozostało " + i[5] + " staminy " + "NUMER POSTACI:" + str(c))
+    c += 1
