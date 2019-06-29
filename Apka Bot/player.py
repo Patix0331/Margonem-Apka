@@ -1,7 +1,17 @@
+import apka
+
 class Player:
-    def __init__(self, id, nick, world, cookies):
-        self.id = id
-        self.nick = nick
-        self.world = world
-        self.cookies = cookies
-        cookies.set("mchar_id", id)
+    def ChooseCharacters(self):
+        while True:
+            charnumber = input("By wystartować bota kliknij ENTER! Wprowadź numer postaci do expienia:  ")
+            if charnumber == "" :
+                break
+            else:
+                try:
+                    charnumber = int(charnumber)
+                    charnumbers.append(charnumber)
+                except Exception:
+                    print("By wystartować bota kliknij ENTER")
+                    continue
+
+        return charnumbers
