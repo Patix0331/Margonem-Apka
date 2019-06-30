@@ -44,7 +44,6 @@ class Apka:
 
         data = post("http://www.margonem.pl/ajax/getplayerdata.php?app_version=1.3.3", cookies = cookies)
         characters = findall(r'id":"(\d*?)","nick":"(.*?)".*?"poziom":"(\d*?)".*?"prof":"(\w)".*?"db":"#(\w*)".*?"stamina":(.*?)}', data.text)
-        print(data.text)
         return characters
 
 
@@ -56,7 +55,7 @@ chars1 = account.chars(cookies1)
 print(cookies1)
 #only for test
 #chars: 0 - id, 1 - nick, 2 - lvl, 3 - prof, 4 - world, 5 - stamina
-#c = 0
-#for i in chars1:
- #   print(i[1] + " (" + i[2] + i[3] + ") [" + i[4] + "] - " + i[0] +" pozostało " + i[5] + " staminy " + "NUMER POSTACI:" + str(c))
-  #  c += 1
+c = 0
+for i in chars1:
+    print(i[1] + " (" + i[2] + i[3] + ") [" + i[4] + "] - " + i[0] +" pozostało " + i[5] + " staminy " + "NUMER POSTACI:" + str(c))
+    c += 1
