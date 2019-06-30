@@ -21,6 +21,9 @@
                 <li><a href="{{ url_for('home') }}">Home</a></li>
             </div>
             <div>
+                {% if current_user.id == 1 %}
+                    <li><a href="{{ url_for('panel')}}">Panel</a></li>
+                {% endif %}
                 {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('acc') }}">Konto</a></li>
                     <li><a href="{{ url_for('logout') }}">Wyloguj się</a></li>
@@ -44,7 +47,7 @@
         {% block content %}{% endblock %}
     </main>
     <footer>
-        footer
+
     </footer>
 </body>
 </html>

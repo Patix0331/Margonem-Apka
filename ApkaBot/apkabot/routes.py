@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request
 from apkabot import app, db, bcrypt
-from apkabot.forms import RegistrationForm, LoginForm, ConnectAccountForm
+from apkabot.forms import RegistrationForm, LoginForm, ConnectAccountForm, PanelForm, AddLicense
 from apkabot.models import User, Account
 from flask_login import login_user, current_user, logout_user, login_required
 from requests import get
@@ -70,10 +70,15 @@ def acc():
             return redirect(url_for('acc'))
         else:
             user_id = form.profile.data[41:]
+
+            # if form.referral.data is not:
+            #     referral = 1
+
             account = Account(
                 owner_id = current_user.id,
                 user_id = user_id,
-                url = form.profile.data)
+                url = form.profile.data,
+                ref = form.referral.data)
             db.session.add(account)
             db.session.commit()
 
@@ -83,3 +88,47 @@ def acc():
     #acc_list = current_user.
     return render_template('account.html', acc_list = acc_list, auth=auth, title=f'{current_user.username}', form=form)
     
+
+@app.route("/panel", methods=['GET','POST'])
+@login_required
+def panel():
+    form = PanelForm()
+    form2 = AddLicense(howLong="30")
+    acc_list = User.query.all()
+    mAcc_list = Account.query.all()
+
+    # if form.validate_on_submit():
+    #     user = User.query.filter_by(id=form.id.data).first()
+
+    if form2.validate_on_submit():
+        from datetime import datetime, timedelta
+
+        acc = Account.query.filter_by(id=form2.id.data).first()
+
+        lic = form2.howLong.data
+
+        if datetime.now() > acc.license:
+            acc.license = datetime.utcnow() + timedelta(days = float(lic))
+        else:
+            acc.license = acc.license + timedelta(days = float(lic))
+
+        if acc.ref:
+            if lic == "7":
+                free = 0.5
+            elif lic == "15":
+                free = 1
+            elif lic == "30":
+                free = 2
+            else:
+                free = 0
+
+            user = User.query.filter_by(id = acc.ref).first()
+            user.free = user.free + free
+
+        db.session.commit()
+        
+
+        flash(f"Nadano {lic} licencji na konto {form2.id.data}a", "success")
+        return redirect(url_for('panel'))
+
+    return render_template('panel.html', acc_list = acc_list, mAcc_list=mAcc_list, title='Panel', form=form, form2=form2)

@@ -213,7 +213,13 @@ footer {
   text-align: center;
 }
 
-#acc-list #play {
-  margin: 4em;
+#acc-list .acc {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#acc-list .acc div {
+  margin: 0 1.5em 0 1.5em;
 }
 /*# sourceMappingURL=main.css.map */

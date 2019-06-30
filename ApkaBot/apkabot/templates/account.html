@@ -2,7 +2,9 @@
 {% block content %}
 <div id=info>
     <h1>{{ current_user.username }}</h1>
-    <h2>{{ current_user.email }}</h2>
+    <h2>{{ current_user.email }}</h2><br>
+    <h3>Twój referral code: {{ current_user.id }}</h3>
+    <h3>Masz do wykorzystania {{ current_user.free }} dni z refów</h3>
 </div>
 <div id="add-acc">
     <form method="post" action="">
@@ -25,6 +27,20 @@
                         {{ form.profile(type="url", class="form-control form-control-lg", minlength="42", maxlength="49", size=30, placeholder="https://www.margonem.pl/?task=profile&id=1234567") }}
                     {% endif %} 
                 </div>
+                <div class="form-group">
+                    {{ form.referral.label(class="form-control-label") }}
+                    {% if form.referral.errors %}  
+
+                        {{ form.referral(class="form-control-label is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.referral.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.referral(class="form-control form-control-lg", placeholder="Opcjonalnie: referral kod") }}
+                    {% endif %} 
+                </div>
             </div>
             <input type="submit" value="Dodaj!">
         </fieldset>
@@ -37,12 +53,14 @@
             <th>User_id</th>
             <th>Link</th> 
             <th>Licencja do</th>
+            <th>Referral</th>
         </tr>
         {% for acc in acc_list %}
         <tr>
             <th>{{acc.user_id}}</th>
             <th><a href="{{acc.url}}">profil</a></th>
             <th>{{acc.license.strftime('%Y-%m-%d %H:%M')}}</th>
+            <th>{% if acc.ref %}{{ acc.ref }}{% endif %}</th>
         </tr>
         {% endfor %}
     </table>
