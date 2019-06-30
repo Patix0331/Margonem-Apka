@@ -42,10 +42,10 @@ class Engine:
                 Engine._CharIterator = 0
 
             character = apka.chars1[Engine._charnumbers[Engine._CharIterator]]
-            if Engine._server == character[4]:
-                time.sleep(5)
+            '''if Engine._server == character[4]:
+                time.sleep(10)
             else:
-                Engine._server = character[4]
+                Engine._server = character[4]'''
             print("character 0 to: " + character[0])
 
             Engine._cookies.set("mchar_id", character[0])
@@ -91,8 +91,6 @@ class Engine:
                     print("fucking podział łupów") #or pending fight (idk how)
                 else:
                     print("waitfor, idk for what")
-            maxhp = re.search('"maxhp": (\d*?),', data.text)
-            print(maxhp[1])
 
         if level == 3:
             Engine._HealItems = []
