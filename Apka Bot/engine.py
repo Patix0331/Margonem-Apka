@@ -72,8 +72,9 @@ class Engine:
                 salt = salt.encode('utf-8')
                 self._characterToken = md5(salt).hexdigest()
             else:
-                print("Error: Postać jest zarejestrowana na innym świecie!")
-                raise Exception
+                print("Error: Postać jest zarejestrowana na innym świecie! ALBO PRZERWA TECHNIAWKA")
+                time.sleep(600)
+                self.ChangeChar()
             waitFor = re.search(r'"wait_for": "(.*?) ', data.text)
             print(waitFor)
             if waitFor:
@@ -94,13 +95,13 @@ class Engine:
             print(maxhp[1])
 
         if level == 3:
-            HealItems = []
+            Engine._HealItems = []
             heals = re.findall(r'"id": (\d*?),.*?\s*"stat": ".*?;leczy=(\d*?);', data.text, re.DOTALL)
             
             for healitem in heals:
                 if int(healitem[1]) > 0:
-                    HealItems.append(healitem[0])
-            print(HealItems)
+                    Engine._HealItems.append(healitem[0])
+            print(Engine._HealItems)
 
         if level == 4:
             timestamp = re.match('{\n  "ev": (.*?),', data.text)
@@ -110,17 +111,28 @@ class Engine:
         #print(data.text)
         time.sleep(1)
         return data
-    def Heal():
-        pass
-        #post Heal
-        '''regexhp = 
+    def Heal(self):
+        print("HEAL")
+        hppercent = 0
+        while hppercent < 75 and len(Engine._HealItems) != 0:
+            time.sleep(0.5)
+            currentTime = time.time()
+            healme = post("http://{}.margonem.pl/engine?t=moveitem&id={}&st=1&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, Engine._HealItems[0], self._id, currentTime, self._characterToken), headers=Engine._headers, cookies = Engine._cookies)
+            print(healme.text)
+            ifLastStack = re.search('"del" : "1"', healme.text)
+            if ifLastStack:
+                Engine._HealItems.pop(0)
+            regexhp = re.search('"hp": (\d*?),', healme.text)
+            regexmaxhp =  re.search('"maxhp": (\d*?),', healme.text)
+            if regexhp and regexmaxhp:
+                hp = int(regexhp[1])
+                print(regexhp)
+                regexmaxhp =  re.search('"maxhp": (\d*?),', healme.text)
+                maxhp = int(regexmaxhp[1])
+                hppercent = 100 * hp/maxhp
+            else:
+                hppercent = 0
 
-        regexmaxhp = 
-
-        while hppercent < 75:
-            
-            if last stack: (amount = 0)
-                delete from array'''
 
 
 
@@ -129,47 +141,44 @@ class Engine:
         print("SELL")
         currentTime = time.time()
         self.item = item
-        self.QuitFight()
-        time.sleep(0.2)
+        time.sleep(0.5)
         x = "http://{}.margonem.pl/engine?t=loot&not=&want={}&must=&final=1&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self.item, self._id, currentTime, self._characterToken)
         print(x)
         accept = post("http://{}.margonem.pl/engine?t=loot&not=&want={}&must=&final=1&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self.item, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies = Engine._cookies)
-        time.sleep(0.2)
+        time.sleep(0.5)
         currentTime = time.time()
         
-        '''data = post("http://{}.margonem.pl/engine?t=_&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
-        time.sleep(0.2)
-        sell = post("http://{}.margonem.pl/engine?t=shop&sell={}&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self.item, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies = Engine._cookies)
-        time.sleep(0.2)'''
-        y = "http://{}.margonem.pl/engine?t=shop&sell={}&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self.item, self._id, currentTime, self._characterToken)
-        print(y)
         sell = post("http://{}.margonem.pl/engine?t=shop&sell={}&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self.item, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies = Engine._cookies)
         print("\t\t\t\t\t\t sell text" + sell.text)
         print("sellnąłem coś")
-        time.sleep(5)
-        pass
     def RefreshEvent(self):
         print("REFRESH")
         """Simple function which refresh _characterEvent value"""
-    
+        time.sleep(0.5)
         currentTime = time.time()
         data = post("http://{}.margonem.pl/engine?t=_&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
-  #      hpp = re.search('"hpp": (.*?),', data.text)
-#        print("hp from ref")
- #       print(hpp)
-        
-        #hppercent = int(hpp[1])
-        #print(hppercent)
-        #if hppercent < 75:
-            #self.Heal()
+        print(data.text)
+        hpp = re.search('"hpp": (\d*?),', data.text)
+        dead = re.search('"dead": (\d.?),', data.text)
+        if dead:
+            time.sleep(int(dead[1]) + 2)
+            self.Heal()
+        if hpp:
+            print("hp from ref")
+            print(hpp)
+            
+            hppercent = int(hpp[1])
+            print(hppercent)
+            if hppercent < 75:
+                self.Heal()
         time.sleep(0.5)
-        loot = re.findall(r'"item":.*?"(.*?)".*?"hid"', data.text, re.DOTALL)
+        loot = re.findall(r'"item":.*?"(\d*?)".*?"hid"', data.text, re.DOTALL)
         print(loot)
         if len(loot) > 0:
             print(loot)
             for item in loot:
                 self.QuitFight()
-                time.sleep(0.2)
+                time.sleep(0.5)
                 self.Sell(item)
         else:
             self.QuitFight()
@@ -209,8 +218,6 @@ class Engine:
 
         currentTime = time.time()
         turnAutoMode = post("http://{}.margonem.pl/engine?t=fight&a=f&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
-        
-        time.sleep(0.2)
     def QuitFight(self):
         print("QUITFIGHT")
         currentTime = time.time()
@@ -222,21 +229,15 @@ class Engine:
 
                     
 
-
-
-
-
 engine = Engine()
 chooseChars = engine.ChooseCharacters()
 while True:
-        awaitime = 1
         while engine._stamina != 0:
             engine.Fight("2675")
-            time.sleep(awaitime)
+            time.sleep(0.5)
             engine.AutoMode()
             #http://aldous.margonem.pl/engine?t=loot&not=&want=572986876&must=&final=1&aid=9045851&mobile=1&ev=1561816451.748353&mobile_token=52d6675a2a926b2e839905b1f5813a05
             # + sell
-            time.sleep(awaitime)
             engine.RefreshEvent() 
 
         engine.ChangeChar()
