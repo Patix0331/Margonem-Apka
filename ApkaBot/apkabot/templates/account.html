@@ -63,6 +63,9 @@
             <th>{% if acc.ref %}{{ acc.ref }}{% endif %}</th>
         </tr>
         {% endfor %}
-    </table>
+    </table><br>
+    <a href="{{ url_for('play') }}">
+        <button>Zaloguj się na bota</button>
+    </a>
 </div>
 {% endblock content %}

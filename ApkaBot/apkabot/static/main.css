@@ -142,7 +142,7 @@ main .login input {
 }
 
 main .login legend {
-  color: #ff00f7;
+  color: #c300bd;
   margin: 0 1em 0.5em 0.2em;
   font-size: 2em;
 }
@@ -152,7 +152,7 @@ main .login .form {
 }
 
 main .login input[type=submit] {
-  background: #ff00f7;
+  background: #c300bd;
   color: black;
   font-size: 1em;
   text-shadow: 0 0 10px black;

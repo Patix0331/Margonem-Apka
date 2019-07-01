@@ -116,3 +116,7 @@ class AddLicense(FlaskForm):
         acc = Account.query.filter_by(id=id.data).first()
         if not acc:
             raise ValidationError('Nie ma użytkownika o podanym ID!')
+
+class PlayBot(FlaskForm):
+    login = StringField("Login", validators=[DataRequired(), Length(min=3,max=20,message="Login musi mieć od 3 do 20 znaków!")])
+    password = PasswordField("Hasło", validators=[DataRequired(), Length(min=6,max=20,message="Login musi mieć od 6 do 20 znaków!")])

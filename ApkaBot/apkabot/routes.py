@@ -1,9 +1,9 @@
 from flask import render_template, url_for, flash, redirect, request
 from apkabot import app, db, bcrypt
-from apkabot.forms import RegistrationForm, LoginForm, ConnectAccountForm, PanelForm, AddLicense
+from apkabot.forms import RegistrationForm, LoginForm, ConnectAccountForm, PanelForm, AddLicense, PlayBot
 from apkabot.models import User, Account
 from flask_login import login_user, current_user, logout_user, login_required
-from requests import get
+from requests import get, post
 
 @app.route("/")
 @app.route("/home")
@@ -132,3 +132,13 @@ def panel():
         return redirect(url_for('panel'))
 
     return render_template('panel.html', acc_list = acc_list, mAcc_list=mAcc_list, title='Panel', form=form, form2=form2)
+
+@app.route("/play")
+@login_required
+def play():
+    form = PlayBot()
+
+    if validate_on_submit():
+        pass
+
+    return render_template('margoLogin.html', title="Bot", form=form)
