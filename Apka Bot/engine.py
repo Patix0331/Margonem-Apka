@@ -1,28 +1,38 @@
-import apka #needed for cookies from previous request (loging requests)
 from requests import post   
 import re
 from hashlib import md5
 import time
-re.DOTALL
-starttime = time.time()
-class Engine:
+
+class Engine():
     _characterToken = ""
     _characterEvent = ""
     level = None
     _charnumbers = []
-    _id = apka.userid
     _stamina = 50
     _server = ""
-    _cookies = apka.cookies1
     _CharIterator = -1
     _HealItems = []
     _maxHP = 0
+    _previousMap = ""
+    _unlockMap = False
+    _map = ""
     _headers = {
             "User-Agent":"Dalvik/2.1.0 (Linux; U; Android 8.0.0; Samsung Galaxy S8 - 8.0 - API 26 - 1440x2960 Build/OPR6.170623.017)",
             "X-Unity-Version":"5.6.2p4"
         }
+    def __init__(self, login, cockie, characters, chosen):
+        Engine._cookies = cockie
+        print(Engine._cookies)
+        Engine._id = login
+        print(Engine._id)
+        Engine._characters = characters
+        print(Engine._characters)
+        Engine._charnumbers = chosen
+        self.ChangeChar()
+    
 
-    def ChooseCharacters(self):
+
+    '''def ChooseCharacters(self):
         while True:
             charnumber = input("By wystartować bota kliknij ENTER! Wprowadź numer postaci do expienia:  ")
             if charnumber == "" :
@@ -34,26 +44,25 @@ class Engine:
                 except Exception:
                     print("By wystartować bota kliknij ENTER")
                     continue
-        self.ChangeChar()
+        self.ChangeChar()'''
     def ChangeChar(self):
             if Engine._CharIterator + 1 != len(Engine._charnumbers):
                 Engine._CharIterator += 1
             else:
                 Engine._CharIterator = 0
 
-            character = apka.chars1[Engine._charnumbers[Engine._CharIterator]]
-            '''if Engine._server == character[4]:
+            character = Engine._characters[Engine._charnumbers[Engine._CharIterator]]
+            if Engine._server == character[4]:
                 time.sleep(10)
             else:
-                Engine._server = character[4]'''
+                Engine._server = character[4]
             print("character 0 to: " + character[0])
 
             Engine._cookies.set("mchar_id", character[0])
-
             print(character[1])
             self._stamina = 50
             for i in range(1,5):
-                data = engine.Initialize(i)
+                data = self.Initialize(i)
     def Initialize(self, level):
         """
         Returning info of character
@@ -61,7 +70,7 @@ class Engine:
         self.level = level
         useToken = True #???
         url = "http://{}.margonem.pl/engine?t=init&initlvl={}&mobile=1&mobile_token={}".format(self._server, self.level, self._characterToken)
-
+        print(url)
         data = post(url, headers=Engine._headers, cookies = Engine._cookies)
         #print("INITIALIZE" + str(self.level) + data.text)
         if level == 1:
@@ -91,6 +100,30 @@ class Engine:
                     print("fucking podział łupów") #or pending fight (idk how)
                 else:
                     print("waitfor, idk for what")
+            lvl = re.search(r'"lvl": (\d*?),', data.text)
+            print(lvl[1])
+            levelek = int(lvl[1])
+            mapky = ['2675', '2676', '2677', '2794', '2795', '2796', '2797', '2798', '2799', '2800', '2801', '2802', '2803', '2804', '2805', '2806', '2807', '2808', '2809', '2810', '2829', '2830', '2831', '2832', '2833', '2834', '2835', '2836', '2837', '2838', '2839', '2840', '2841', '2842', '2843', '2844', '2845', '2846', '2847', '2848', '2849', '2850', '2851', '2852', '2853', '2854', '2855', '2856', '2857', '2858', '2859', '3977', '3978', '3979', '3980', '3981', '3982', '3983', '3984', '3985']
+            #mapkyelite = ['100318', '100319', '101250', '101251', '101252', '101253', '101254', '101255', '101256', '101257', '104715', '104716', '104717', '104718', '104719', '104720', '104721', '104722', '104723', '104724']
+            place = round(levelek // 5.1)
+            Engine._map = mapky[place]
+            if place > 0:
+                Engine._previousMap = mapky[place - 1]
+            else: 
+                Engine._previousMap = ""
+
+            print(Engine._map)
+        if level == 2:
+            if Engine._previousMap != "":
+                myregex = Engine._previousMap
+                print(myregex)
+                isMapLocked = re.search(myregex + r'": \n    {\n      "name": "(.*?)",\n      "bg": "(.*?)",\n      "done": (.?),', data.text)
+                print(isMapLocked)
+                print(isMapLocked[1])
+                print(isMapLocked[2])
+                print(isMapLocked[3])
+                if isMapLocked[3] == 0:
+                    Engine._unlockMap = True
 
         if level == 3:
             Engine._HealItems = []
@@ -187,12 +220,15 @@ class Engine:
         #   return True
         #return False
         return loot
-    def Fight(self, town):
+    def Fight(self):
         print("FIGHT")
-        self.town = town
+        town = Engine._map
+        print("\t\t\t\t\t\t\t\t" + town)
         currentTime = time.time()
-
-        attackmanual = post("http://{}.margonem.pl/engine?t=fight&a=attack&town_id={}&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self.town, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
+        if Engine._unlockMap == True:
+            attackmanual = post("http://{}.margonem.pl/engine?t=fight&a=attack&town_id={}&boss_fight=1&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, town, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
+        else:
+            attackmanual = post("http://{}.margonem.pl/engine?t=fight&a=attack&town_id={}&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, town, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
         #print(attackmanual.text)
         reload = re.match('{\n  "e": "Błąd wewnętrzny: Pominięty pakiet danych inicjujących"', attackmanual.text)
         if reload:
@@ -222,23 +258,21 @@ class Engine:
         #quit pending fight
         quitCurrentFight = post("http://{}.margonem.pl/engine?t=fight&a=quit&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
         #print("\nZakończenie walki" + quitCurrentFight.text)
-    def FightAndRelog(self):
-        pass
+        
+            #print("Start fight.", attackmanual.text)
+    def Run(self):
+        while True:
+                while self._stamina != 0:
+                    self.Fight()
+                    time.sleep(0.5)
+                    self.AutoMode()
+                    #http://aldous.margonem.pl/engine?t=loot&not=&want=572986876&must=&final=1&aid=9045851&mobile=1&ev=1561816451.748353&mobile_token=52d6675a2a926b2e839905b1f5813a05
+                    # + sell
+                    self.RefreshEvent() 
 
-                    
+                self.ChangeChar()
+#engine = Engine(apka.SignIn("app", "1234"))
 
-engine = Engine()
-chooseChars = engine.ChooseCharacters()
-while True:
-        while engine._stamina != 0:
-            engine.Fight("2675")
-            time.sleep(0.5)
-            engine.AutoMode()
-            #http://aldous.margonem.pl/engine?t=loot&not=&want=572986876&must=&final=1&aid=9045851&mobile=1&ev=1561816451.748353&mobile_token=52d6675a2a926b2e839905b1f5813a05
-            # + sell
-            engine.RefreshEvent() 
-
-        engine.ChangeChar()
 
 #initialize should be available from bot.py
 '''if __name__ == "__main__":
@@ -251,7 +285,3 @@ afterlogin = engine.RefreshEvent()
 #just for tests. 
 for i in range(1, 3):
     engine.Fight("2675")'''
-
-stoptime = time.time()
-worktime = round(stoptime - starttime, 2)
-print("Zbicie staminy zajęło " + str(worktime) + "s")

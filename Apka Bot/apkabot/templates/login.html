@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <form method="post" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="login">
+            <legend>Logowanie</legend>
+            <div class="form">
+            <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}
+                    {% if form.email.errors %}  
+
+                        {{ form.email(class="form-control-label is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(type="email", class="form-control form-control-lg", placeholder="E-mail") }}
+                    {% endif %} 
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-control-label") }}
+                    {% if form.password.errors %}  
+
+                        {{ form.password(class="form-control-label is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-control form-control-lg", minlength="3", maxlength="15", placeholder="Hasło") }}
+                    {% endif %} 
+                </div>
+                <div class="form-check">
+                    {{ form.remember(class="form-check-input") }}
+                    {{ form.remember.label(class="form-check-label") }}
+                </div>
+            </div>
+            <input type="submit" value="Zaloguj się!">
+        </fieldset>
+        <center>
+            <a info="info" href="#">Zapomniałeś hasło?</a><br>
+            <a info="info" href="#">Potrzebujesz zrobić konto?</a>
+        </center>
+    </form>
+</div>
+{% endblock content %}
