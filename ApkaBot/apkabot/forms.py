@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectMultipleField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp, NumberRange, Optional
 from apkabot.models import User, Account
 
@@ -119,4 +119,8 @@ class AddLicense(FlaskForm):
 
 class PlayBot(FlaskForm):
     login = StringField("Login", validators=[DataRequired(), Length(min=3,max=20,message="Login musi mieć od 3 do 20 znaków!")])
-    password = PasswordField("Hasło", validators=[DataRequired(), Length(min=6,max=20,message="Login musi mieć od 6 do 20 znaków!")])
+    password = PasswordField("Hasło", validators=[DataRequired(), Length(min=4,max=20,message="Login musi mieć od 6 do 20 znaków!")])
+
+class SendChars(FlaskForm):
+    chars = SelectMultipleField('Postacie', choices=[], coerce=int)
+    submit = SubmitField('Start!')

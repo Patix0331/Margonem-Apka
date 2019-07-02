@@ -58,7 +58,7 @@
         {% for acc in acc_list %}
         <tr>
             <th>{{acc.user_id}}</th>
-            <th><a href="{{acc.url}}">profil</a></th>
+            <th><a href="{{acc.url}}" target="_blank">profil</a></th>
             <th>{{acc.license.strftime('%Y-%m-%d %H:%M')}}</th>
             <th>{% if acc.ref %}{{ acc.ref }}{% endif %}</th>
         </tr>

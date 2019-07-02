@@ -13,6 +13,7 @@ flask-bc = "*"
 flask-bcrypt = "*"
 flask-login = "*"
 requests = "*"
+flask-session = "*"
 
 [requires]
 python_version = "3.6"

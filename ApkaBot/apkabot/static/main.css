@@ -222,4 +222,12 @@ footer {
 #acc-list .acc div {
   margin: 0 1.5em 0 1.5em;
 }
+
+select {
+  background: #181818;
+  border-color: #181818;
+  color: white;
+  width: 200px;
+  height: 200px;
+}
 /*# sourceMappingURL=main.css.map */

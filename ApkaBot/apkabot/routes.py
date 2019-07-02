@@ -1,7 +1,9 @@
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, session
 from apkabot import app, db, bcrypt
-from apkabot.forms import RegistrationForm, LoginForm, ConnectAccountForm, PanelForm, AddLicense, PlayBot
+from apkabot.forms import RegistrationForm, LoginForm, ConnectAccountForm, PanelForm, AddLicense, PlayBot, SendChars
 from apkabot.models import User, Account
+from apkabot.bot.engine import Engine
+from apkabot.bot.apka import Apka
 from flask_login import login_user, current_user, logout_user, login_required
 from requests import get, post
 
@@ -133,12 +135,58 @@ def panel():
 
     return render_template('panel.html', acc_list = acc_list, mAcc_list=mAcc_list, title='Panel', form=form, form2=form2)
 
-@app.route("/play")
+@app.route("/play", methods=['GET','POST'])
 @login_required
 def play():
+
+    from datetime import datetime
+
     form = PlayBot()
 
-    if validate_on_submit():
-        pass
+    if form.validate_on_submit():
+
+        apka = Apka(form.login.data, form.password.data)
+        chars, cookies = apka.signIn()
+        chars = [char for char in chars]
+        session['chars'] = chars
+        session['cookies'] = cookies.get_dict()
+
+        acc = Account.query.filter_by(user_id=cookies["user_id"]).first()
+
+        if acc:
+
+            if acc.license > datetime.now():
+
+                chars = [(chars.index(c), "{} - {} lvl, {}".format(c[1], c[2], c[4])) for c in chars]
+                return redirect(url_for('bot'))
+
+            else:
+
+                flash("Przedawniona licencja!", "danger")  
+                redirect(url_for("play"))
+
+        else:
+
+            flash("Połącz konto i kup licencje!", "danger")
+            redirect(url_for("acc"))
+
 
     return render_template('margoLogin.html', title="Bot", form=form)
+
+@app.route("/bot", methods=['GET','POST'])
+@login_required
+def bot():
+
+    form = SendChars()
+    chars = session.get('chars', None)
+    chars = [(chars.index(c), "{} - {} lvl, {}".format(c[1], c[2], c[4])) for c in chars]
+    form.chars.choices = chars
+
+    if form.validate_on_submit():
+        flash("Trwa uruchamianie bota...")
+        engine = Engine(session.get('cookies', None), session.get('chars', None), form.chars.data)
+        engine.Run()
+        flash("Chyba śmiga, idk.")
+
+
+    return render_template('logged.html', title="Zalogowany", form=form)
