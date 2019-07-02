@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <form method="post" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="login">
+            <legend>Margo Bot</legend>
+            <div class="form">
+            <div class="form-group">
+                    {{ form.login.label(class="form-control-label") }}
+                    {% if form.login.errors %}  
+
+                        {{ form.login(class="form-control-label is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.login.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.login(type="text", class="form-control form-control-lg", minlength="3", maxlength="20", placeholder="Login") }}
+                    {% endif %} 
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-control-label") }}
+                    {% if form.password.errors %}  
+
+                        {{ form.password(class="form-control-label is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-control form-control-lg", minlength="4", maxlength="20", placeholder="Hasło") }}
+                    {% endif %} 
+                </div>
+            </div>
+            <input type="submit" value="Zaloguj się!">
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}

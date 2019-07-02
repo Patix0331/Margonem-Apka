@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    {% if title %}
+        <title>ApkaBot - {{ title }}</title>
+    {% else %}
+        <title>ApkaBot</title>
+    {% endif %}
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+</head>
+<body>
+    <header>
+        <nav>
+            <div>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+            </div>
+            <div>
+                {% if current_user.id == 1 %}
+                    <li><a href="{{ url_for('panel')}}">Panel</a></li>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('acc') }}">Konto</a></li>
+                    <li><a href="{{ url_for('logout') }}">Wyloguj się</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Logowanie</a></li>
+                    <li><a href="{{ url_for('register') }}">Rejestracja</a></li>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert" id="alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+
+    </footer>
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% block content %}
+<!-- KONTA NA APCE -->
+<div id="acc-list">
+    <h2>Accounts on app: {{acc_list.__len__()}}</h2> <br>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Ref days</th>
+            <th>Accounts</th>
+        </tr>
+        {% for acc in acc_list %}
+        <tr>
+            <th>{{acc.id}}u</th>
+            <th>{{acc.username}}</th>
+            <th>{{acc.email}}</th>
+            <th>{{acc.free}}</th>
+            <th>
+                {% if acc.accounts %}
+                    <select name="margoAccounts">
+                        {% for mAcc in acc.accounts %}
+                            <option value="{{mAcc.user_id}}">{{mAcc.id}}a</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    brak
+                {% endif %}
+            </th>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+<!-- KONTO MARGONEM -->
+<div id="add-acc">
+        <h2>Margo accounts: {{mAcc_list.__len__()}}</h2> <br>
+
+        <form method="post" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="login">
+            <legend>Nadawanie licencji</legend>
+            <div class="form">
+            <div class="form-group">
+                    {% if form2.id.errors %}  
+                        {{ form2.id(class="form-control-label is-invalid", type="number") }}
+                        <div class="invalid-feedback">
+                            {% for error in form2.id.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form2.id(class="form-control form-control-lg", placeholder="ID", type="number") }}
+                    {% endif %} 
+                </div>
+                <div class="form-group">
+                    {{ form2.howLong.label(class="form-control-label") }}
+                    {% if form2.howLong.errors %}  
+
+                        {{ form2.howLong(class="form-control-label is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form2.howLong.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form2.howLong(class="form-control form-control-lg") }}
+                    {% endif %} 
+                </div>
+                <!-- <div class="form-check">
+                </div> -->
+            </div>
+            <input type="submit" value="Nadaj!">
+        </fieldset>
+    </form>
+        <table border="solid">
+            <tr>
+                <th>Id</th>
+                <th>Owner</th>
+                <th>User_ID</th>
+                <th>L:P</th>
+                <th>Profil</th>
+                <th>Ref</th>
+                <th>License</th>
+            </tr>
+            {% for acc in mAcc_list %}
+                <tr>
+                    <th>{{acc.id}}a</th>
+                    <th>{{acc.owner_id}}</th>
+                    <th>{{acc.user_id}}</th>
+                    <th>{{acc.login}}:{{acc.password}}</th>
+                    <th><a href="{{acc.url}}" target="_blank">Link</a></th>
+                    <th>{{acc.ref}}</th>
+                    <th>{{acc.license}}</th>
+                </tr>
+            {% endfor %}
+        </table>
+</div>
+{% endblock content %}

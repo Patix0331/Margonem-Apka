@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <form method="post" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="login">
+            <legend>Wybór postaci</legend>
+            <div class="form">
+            <div class="form-group">
+                    {% if form.chars.errors %}  
+
+                        {{ form.chars(class="form-control-label is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.chars.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.chars(class="form-control form-control-lg") }}
+                    {% endif %} 
+                </div>
+            </div>
+            <input type="submit" value="Start!">
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}
