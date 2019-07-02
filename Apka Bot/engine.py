@@ -20,11 +20,9 @@ class Engine():
             "User-Agent":"Dalvik/2.1.0 (Linux; U; Android 8.0.0; Samsung Galaxy S8 - 8.0 - API 26 - 1440x2960 Build/OPR6.170623.017)",
             "X-Unity-Version":"5.6.2p4"
         }
-    def __init__(self, login, cockie, characters, chosen):
+    def __init__(self, cockie, characters, chosen):
         Engine._cookies = cockie
         print(Engine._cookies)
-        Engine._id = login
-        print(Engine._id)
         Engine._characters = characters
         print(Engine._characters)
         Engine._charnumbers = chosen
@@ -154,13 +152,13 @@ class Engine():
             print("INFINITY LOOP")
             time.sleep(0.5)
             currentTime = time.time()
-            x = "http://{}.margonem.pl/engine?t=moveitem&id={}&st=1&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, Engine._HealItems[0], self._id, currentTime, self._characterToken)
+            x = "http://{}.margonem.pl/engine?t=moveitem&id={}&st=1&mobile=1&ev={}&mobile_token={}".format(self._server, Engine._HealItems[0], currentTime, self._characterToken)
             print(x)
-            healme = post("http://{}.margonem.pl/engine?t=moveitem&id={}&st=1&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, Engine._HealItems[0], self._id, currentTime, self._characterToken), headers=Engine._headers, cookies = Engine._cookies)
+            healme = post("http://{}.margonem.pl/engine?t=moveitem&id={}&st=1&mobile=1&ev={}&mobile_token={}".format(self._server, Engine._HealItems[0], currentTime, self._characterToken), headers=Engine._headers, cookies = Engine._cookies)
             #neededref = re.search('"e": "ok"', healme.text)
 
             #if neededref:
-            #   healme = post("http://{}.margonem.pl/engine?t=_&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
+            #   healme = post("http://{}.margonem.pl/engine?t=_&mobile=1&ev={}&mobile_token={}".format(self._server, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
             print(healme.text)
 
             ifLastStack = re.search('"del": "1"', healme.text)
@@ -192,13 +190,13 @@ class Engine():
         currentTime = time.time()
         self.item = item
         time.sleep(0.5)
-        x = "http://{}.margonem.pl/engine?t=loot&not=&want={}&must=&final=1&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self.item, self._id, currentTime, self._characterToken)
+        x = "http://{}.margonem.pl/engine?t=loot&not=&want={}&must=&final=1&mobile=1&ev={}&mobile_token={}".format(self._server, self.item, currentTime, self._characterToken)
         print(x)
-        accept = post("http://{}.margonem.pl/engine?t=loot&not=&want={}&must=&final=1&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self.item, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies = Engine._cookies)
+        accept = post("http://{}.margonem.pl/engine?t=loot&not=&want={}&must=&final=1&mobile=1&ev={}&mobile_token={}".format(self._server, self.item, currentTime, self._characterToken), headers=Engine._headers, cookies = Engine._cookies)
         time.sleep(0.5)
         currentTime = time.time()
         
-        sell = post("http://{}.margonem.pl/engine?t=shop&sell={}&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self.item, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies = Engine._cookies)
+        sell = post("http://{}.margonem.pl/engine?t=shop&sell={}&mobile=1&ev={}&mobile_token={}".format(self._server, self.item, currentTime, self._characterToken), headers=Engine._headers, cookies = Engine._cookies)
         print("\t\t\t\t\t\t sell text" + sell.text)
         print("sellnąłem coś")
     def RefreshEvent(self):
@@ -206,7 +204,7 @@ class Engine():
         """Simple function which refresh _characterEvent value"""
         time.sleep(0.5)
         currentTime = time.time()
-        data = post("http://{}.margonem.pl/engine?t=_&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
+        data = post("http://{}.margonem.pl/engine?t=_&mobile=1&ev={}&mobile_token={}".format(self._server, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
         print(data.text)
         refresh = re.search('"t": "reload",', data.text)
         if refresh:
@@ -228,7 +226,7 @@ class Engine():
             time.sleep(int(dead[1]) + 2)
             self.Heal()
             currentTime = time.time()
-            ref = post("http://{}.margonem.pl/engine?t=_&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
+            ref = post("http://{}.margonem.pl/engine?t=_&mobile=1&ev={}&mobile_token={}".format(self._server, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
 
         if hpp:
             print("hp from ref")
@@ -236,7 +234,7 @@ class Engine():
             if hpp < 75:
                 self.Heal()
             currentTime = time.time()
-            ref = post("http://{}.margonem.pl/engine?t=_&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
+            ref = post("http://{}.margonem.pl/engine?t=_&mobile=1&ev={}&mobile_token={}".format(self._server, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
 
         if len(loot) > 0:
             print(loot)
@@ -257,14 +255,14 @@ class Engine():
         if Engine._unlockMap == True:
             town = Engine._previousMap
             print("ODBLOKOWUJĘ MAPĘ")
-            c = "http://{}.margonem.pl/engine?t=fight&a=attack&town_id={}&boss_fight=1&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, town, self._id, currentTime, self._characterToken)
+            c = "http://{}.margonem.pl/engine?t=fight&a=attack&town_id={}&boss_fight=1&mobile=1&ev={}&mobile_token={}".format(self._server, town, currentTime, self._characterToken)
             print
-            attackmanual = post("http://{}.margonem.pl/engine?t=fight&a=attack&town_id={}&boss_fight=1&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, town, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
+            attackmanual = post("http://{}.margonem.pl/engine?t=fight&a=attack&town_id={}&boss_fight=1&&mobile=1&ev={}&mobile_token={}".format(self._server, town, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
             Engine._unlockMap = False 
             print(attackmanual.text)
         else:
             print("ATAKUJE NORMALNIE")
-            attackmanual = post("http://{}.margonem.pl/engine?t=fight&a=attack&town_id={}&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, town, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
+            attackmanual = post("http://{}.margonem.pl/engine?t=fight&a=attack&town_id={}&mobile=1&ev={}&mobile_token={}".format(self._server, town, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
         #print(attackmanual.text)
         reload = re.match('{\n  "e": "Błąd wewnętrzny: Pominięty pakiet danych inicjujących"', attackmanual.text)
         if reload:
@@ -286,12 +284,12 @@ class Engine():
         print("AUTOMODE")
 
         currentTime = time.time()
-        turnAutoMode = post("http://{}.margonem.pl/engine?t=fight&a=f&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
+        turnAutoMode = post("http://{}.margonem.pl/engine?t=fight&a=f&mobile=1&ev={}&mobile_token={}".format(self._server, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
     def QuitFight(self):
         print("QUITFIGHT")
         currentTime = time.time()
         #quit pending fight
-        quitCurrentFight = post("http://{}.margonem.pl/engine?t=fight&a=quit&aid={}&mobile=1&ev={}&mobile_token={}".format(self._server, self._id, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
+        quitCurrentFight = post("http://{}.margonem.pl/engine?t=fight&a=quit&mobile=1&ev={}&mobile_token={}".format(self._server, currentTime, self._characterToken), headers=Engine._headers, cookies=Engine._cookies)
         #print("\nZakończenie walki" + quitCurrentFight.text)
         
             #print("Start fight.", attackmanual.text)
