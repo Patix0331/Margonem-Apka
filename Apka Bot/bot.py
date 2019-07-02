@@ -23,7 +23,7 @@ def RunBot(chosen):
 
 y, userid, cokiess, chars1 = LogIntoBot("app","1234")
 print(y)
-x = RunBot([0,1,2])
+x = RunBot([0,1,2,3,4,5,6,7,8,9,10])
 print(x)
 #engine.Engine()
 #print(chars)
