@@ -2,7 +2,7 @@
 from apka import *
 import player
 from engine import *
-def LogIntoBot(login, password):
+def LogIntoBot(login=None, password=None):
     cokiess = signIn(login,password)
     print(cokiess)
     chars1 = chars(cokiess)
@@ -17,14 +17,14 @@ def LogIntoBot(login, password):
         return ret
     postki1 = postki()
     return postki1, cokiess, chars1
-def RunBot(chosen):
+def RunBot(chosen=None):
     engine = Engine(cokiess, chars1, chosen)
     engine.Run()
 
-y, cokiess, chars1 = LogIntoBot("app","1234")
-print(y)
-x = RunBot([0,1,2,3,4,5,6,7,8,9,10])
-print(x)
+# y, cokiess, chars1 = LogIntoBot("app","1234")
+# print(y)
+# x = RunBot([0,1,2,3,4,5,6,7,8,9,10])
+# print(x)
 #engine.Engine()
 #print(chars)
 #apk = apka.apka()

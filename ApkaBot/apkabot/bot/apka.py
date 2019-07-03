@@ -1,10 +1,10 @@
 class Apka:
     
-    def __init__(self, login, password):
+    def __init__(self, login=None, password=None):
         self.login = login
         self.password = password
 
-    def chars(self, cookies):
+    def chars(self, cookies=None):
         from re import findall
         from requests import post
         
