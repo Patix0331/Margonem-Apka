@@ -15,8 +15,8 @@ class User(db.Model, UserMixin):
     free = db.Column(db.Float, nullable=True, default = 0)
     accounts = db.relationship('Account', backref='owner', lazy=True)
 
-    def __repr__(self):
-        return f"'{self.id}','{self.username}', '{self.email}', '{self.free}', {self.accounts})"
+    #def __repr__(self):
+    #    return f"'{self.id}','{self.username}', '{self.email}', '{self.free}', {self.accounts})"
 
 class Account(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -30,5 +30,5 @@ class Account(db.Model):
     ref = db.Column(db.Integer, nullable=True)
     license = db.Column(db.DateTime, nullable=True, default = datetime.now() + timedelta(hours=3)) 
 
-    def __repr__(self):
-        return f"'{self.id}',' Owner:{self.owner_id}', '{self.user_id}', L:'{self.login}', P:'{self.password}', ref:'{self.ref}', '{self.license}'"
+    #def __repr__(self):
+    #    return f"'{self.id}',' Owner:{self.owner_id}', '{self.user_id}', L:'{self.login}', P:'{self.password}', ref:'{self.ref}', '{self.license}'"

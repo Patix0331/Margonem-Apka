@@ -2,11 +2,13 @@ from requests import post
 import re
 from hashlib import md5
 import time
+import json
 
 class Engine():
     _characterToken = None
     _characterEvent = None
     level = None
+    logged = True
     _charnumbers = None
     _stamina = 50
     _server = ""
@@ -264,6 +266,21 @@ class Engine():
         else:
             print("ATAKUJE NORMALNIE")
             attackmanual = post("http://{}.margonem.pl/engine?t=fight&a=attack&town_id={}&mobile=1&ev={}&mobile_token={}".format(self._server, town, currentTime, self._characterToken), headers=self._headers, cookies=self._cookies)
+            
+            a = json.loads(attackmanual.text)
+            try:
+                if "Nie jesteś zalogowany" in a['w']:
+                    #print("Logout. Closing the bot")
+                    self.logged = False
+                
+            except:
+                try:
+                    if "Nie jesteś zalogowany" in a['alert']:
+                        #print("Logout. Closing the bot")
+                        self.logged = False
+                except:
+                    pass
+        
         #print(attackmanual.text)
         reload = re.match('{\n  "e": "Błąd wewnętrzny: Pominięty pakiet danych inicjujących"', attackmanual.text)
         if reload:
@@ -295,14 +312,18 @@ class Engine():
         
             #print("Start fight.", attackmanual.text)
     def Run(self):
-        while True:
+        while self.logged:
                 while self._stamina != 0:
+                    if self.logged is False:
+                        break
                     self.Fight()
                     time.sleep(0.5)
                     self.AutoMode()
                     #http://aldous.margonem.pl/engine?t=loot&not=&want=572986876&must=&final=1&aid=9045851&mobile=1&ev=1561816451.748353&mobile_token=52d6675a2a926b2e839905b1f5813a05
                     # + sell
-                    self.RefreshEvent() 
+                    time.sleep(0.5)
+                    a = self.RefreshEvent() 
+                    time.sleep(0.5)
 
                 self.ChangeChar()
 #engine = Engine(apka.SignIn("app", "1234"))

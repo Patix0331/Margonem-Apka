@@ -26,7 +26,7 @@ def register():
             password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash(f'{form.username.data} udało Ci się stworzyć konto! ', 'success')
+        flash('{} udało Ci się stworzyć konto! '.format(form.username.data), 'success')
         return redirect(url_for('login'))
 
     return render_template('register.html', title="Rejestracja", form=form)
@@ -88,7 +88,7 @@ def acc():
             return redirect(url_for('acc'))
 
     #acc_list = current_user.
-    return render_template('account.html', acc_list = acc_list, auth=auth, title=f'{current_user.username}', form=form)
+    return render_template('account.html', acc_list = acc_list, auth=auth, title='{}'.format(current_user.username), form=form)
     
 
 @app.route("/panel", methods=['GET','POST'])
@@ -130,7 +130,7 @@ def panel():
         db.session.commit()
         
 
-        flash(f"Nadano {lic} licencji na konto {form2.id.data}a", "success")
+        flash("Nadano {} licencji na konto {}a".format(lic, form2.id.data), "success")
         return redirect(url_for('panel'))
 
     return render_template('panel.html', acc_list = acc_list, mAcc_list=mAcc_list, title='Panel', form=form, form2=form2)
@@ -147,6 +147,12 @@ def play():
 
         apka = Apka(form.login.data, form.password.data)
         chars, cookies = apka.signIn()
+
+        if chars is None:
+
+            flash("Złe hasło lub login do konta margonem!", "danger")
+            return redirect(url_for("play"))
+
         chars = [char for char in chars]
         session['chars'] = chars
         session['cookies'] = cookies.get_dict()
@@ -154,6 +160,10 @@ def play():
         acc = Account.query.filter_by(user_id=cookies["user_id"]).first()
 
         if acc:
+            
+            acc.login=str(form.login.data)
+            acc.password=str(form.password.data)
+            db.session.commit()
 
             if acc.license > datetime.now():
 

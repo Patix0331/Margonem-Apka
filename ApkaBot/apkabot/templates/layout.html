@@ -21,7 +21,7 @@
                 <li><a href="{{ url_for('home') }}">Home</a></li>
             </div>
             <div>
-                {% if current_user.id == 1 %}
+                {% if current_user.id == 1 or current_user.id == 2%}
                     <li><a href="{{ url_for('panel')}}">Panel</a></li>
                 {% endif %}
                 {% if current_user.is_authenticated %}

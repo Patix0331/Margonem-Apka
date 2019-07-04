@@ -30,4 +30,4 @@ class Apka:
         if("logged" in str(response.content)):
             return self.chars(response.cookies)
         else:
-            raise Exception
+            return None, None
