@@ -195,8 +195,7 @@ def bot():
     if form.validate_on_submit():
         flash("Trwa uruchamianie bota...")
         engine = Engine(session.get('cookies', None), session.get('chars', None), form.chars.data)
-        engine.Run()
-        flash("Chyba śmiga, idk.")
+        return engine.Run()
 
 
     return render_template('logged.html', title="Zalogowany", form=form)

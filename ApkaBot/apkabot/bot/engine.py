@@ -62,6 +62,7 @@ class Engine():
             print("Character[1] - chuj wie co to: ", character[1])
             self._stamina = 50
             for i in range(1,5):
+                time.sleep(0.5)
                 data = self.Initialize(i)
 
     def Initialize(self, level):

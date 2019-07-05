@@ -14,6 +14,7 @@ flask-bcrypt = "*"
 flask-login = "*"
 requests = "*"
 flask-session = "*"
+asyncio = "*"
 
 [requires]
 python_version = "3.6"
