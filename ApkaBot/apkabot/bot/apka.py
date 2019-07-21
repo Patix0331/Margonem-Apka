@@ -290,7 +290,7 @@ class Account():
         #         url = stamina XD
         pass
 
-    async def run(self, chars, time):
+    asyncdef run(self, chars, time):
 
         from datetime import datetime
 

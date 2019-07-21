@@ -5,7 +5,6 @@ from apkabot.models import User, Account
 from apkabot.bot.apka import Account as ac
 from flask_login import login_user, current_user, logout_user, login_required
 from requests import get, post
-import asyncio
 
 @app.route("/")
 @app.route("/home")
@@ -223,7 +222,7 @@ def bot():
         if form.submit.data:
             
             flash("Bot wystartował {}!".format(selected_chars), 'success')
-            asyncio.run(apka.run(selected_chars, session.get('license_time', None)))
+            apka.run(selected_chars, session.get('license_time', None))
 
         elif form.add.data:
 
