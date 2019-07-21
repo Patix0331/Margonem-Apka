@@ -6,9 +6,9 @@
         <fieldset class="login">
             <legend>Wybór postaci</legend>
             <div class="form">
+                {{session.get('selected_chars')}}
             <div class="form-group">
                     {% if form.chars.errors %}  
-
                         {{ form.chars(class="form-control-label is-invalid") }}
                         <div class="invalid-feedback">
                             {% for error in form.chars.errors %}
@@ -19,8 +19,22 @@
                         {{ form.chars(class="form-control form-control-lg") }}
                     {% endif %} 
                 </div>
+                <div class="form-group">
+                        {% if form.maps.errors %}  
+                            {{ form.maps(class="form-control-label is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.maps.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.maps(class="form-control form-control-lg") }}
+                        {% endif %} 
+                    </div>
+                    {{form.add}}
+                </div>
+                {{form.submit}}
             </div>
-            <input type="submit" value="Start!">
         </fieldset>
     </form>
 </div>

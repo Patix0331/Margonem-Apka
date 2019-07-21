@@ -47,7 +47,7 @@ class LoginForm(FlaskForm):
 class ConnectAccountForm(FlaskForm):
     profile = StringField('Link do profilu', validators=[
         DataRequired(),
-        Regexp(regex=r'^https:\/\/www.margonem.pl\/\?task=profile\&id=[0-9]([0-9])*$', message="Zły link do profilu"),
+        Regexp(regex=r'https:\/\/\w\w\w\.margonem\.pl.+profile\D+(\d+)', message="Zły link do profilu"),
         Length(min=42, max=50)])
 
     referral = IntegerField('Refferal', validators=[Optional(), NumberRange(1,4000, message="")])
@@ -122,5 +122,7 @@ class PlayBot(FlaskForm):
     password = PasswordField("Hasło", validators=[DataRequired(), Length(min=4,max=20,message="Login musi mieć od 6 do 20 znaków!")])
 
 class SendChars(FlaskForm):
-    chars = SelectMultipleField('Postacie', choices=[], coerce=int)
+    chars = SelectField('Postacie', choices=[])
+    maps = SelectField('Mapy', choices=[('2675', 'Leśny Gąszcz [1-5]'), ('2676', 'Zaginiony Matecznik [6-10]')])
+    add = SubmitField('Dodaj postać')
     submit = SubmitField('Start!')

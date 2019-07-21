@@ -2,10 +2,10 @@ from flask import render_template, url_for, flash, redirect, request, session
 from apkabot import app, db, bcrypt
 from apkabot.forms import RegistrationForm, LoginForm, ConnectAccountForm, PanelForm, AddLicense, PlayBot, SendChars
 from apkabot.models import User, Account
-from apkabot.bot.engine import Engine
-from apkabot.bot.apka import Apka
+from apkabot.bot.apka import Account as ac
 from flask_login import login_user, current_user, logout_user, login_required
 from requests import get, post
+import asyncio
 
 @app.route("/")
 @app.route("/home")
@@ -15,7 +15,7 @@ def home():
 @app.route("/register", methods=['GET','POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('acc'))
 
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -94,6 +94,11 @@ def acc():
 @app.route("/panel", methods=['GET','POST'])
 @login_required
 def panel():
+    
+    #redirect if not admin
+    if current_user.id != 1 or current_user.id != 2:
+        return redirect(url_for('acc')) 
+
     form = PanelForm()
     form2 = AddLicense(howLong="30")
     acc_list = User.query.all()
@@ -145,19 +150,15 @@ def play():
 
     if form.validate_on_submit():
 
-        apka = Apka(form.login.data, form.password.data)
-        chars, cookies = apka.signIn()
+        apka = ac(form.login.data, form.password.data)
+        apka.signIn()
 
-        if chars is None:
+        if not apka.cookies:
 
             flash("Złe hasło lub login do konta margonem!", "danger")
             return redirect(url_for("play"))
 
-        chars = [char for char in chars]
-        session['chars'] = chars
-        session['cookies'] = cookies.get_dict()
-
-        acc = Account.query.filter_by(user_id=cookies["user_id"]).first()
+        acc = Account.query.filter_by(user_id=apka.cookies["user_id"]).first()
 
         if acc:
             
@@ -167,7 +168,17 @@ def play():
 
             if acc.license > datetime.now():
 
-                chars = [(chars.index(c), "{} - {} lvl, {}".format(c[1], c[2], c[4])) for c in chars]
+                #chars = [(chars.index(c), "{} - {} lvl, {}".format(c[1], c[2], c[4])) for c in chars]
+                session['asd'] = str(form.login.data)
+                session['dsa'] = str(form.password.data)
+                session['license_time'] = acc.license
+                session['verified'] = True
+
+                try:
+                    session.pop('selected_chars')
+                except KeyError:
+                    pass
+
                 return redirect(url_for('bot'))
 
             else:
@@ -187,15 +198,39 @@ def play():
 @login_required
 def bot():
 
+    try:
+        session.get('verified', None)
+    except NameError:
+        return redirect(url_for('play'))
+
     form = SendChars()
-    chars = session.get('chars', None)
-    chars = [(chars.index(c), "{} - {} lvl, {}".format(c[1], c[2], c[4])) for c in chars]
+    
+    apka = ac(session.get('asd', None), session.get('dsa', None))
+    apka.signIn()
+    apka.get_chars()
+
+    chars = [(char, '{} - {} lvl, {}'.format(
+        apka.characters[char]['nick'], 
+        apka.characters[char]['lvl'], 
+        apka.characters[char]['world'])) for char in apka.characters]
+
     form.chars.choices = chars
 
     if form.validate_on_submit():
-        flash("Trwa uruchamianie bota...")
-        engine = Engine(session.get('cookies', None), session.get('chars', None), form.chars.data)
-        return engine.Run()
 
+        selected_chars = session.get('selected_chars', None)
+
+        if form.submit.data:
+            
+            flash("Bot wystartował {}!".format(selected_chars), 'success')
+            asyncio.run(apka.run(selected_chars, session.get('license_time', None)))
+
+        elif form.add.data:
+
+            if not selected_chars:
+                selected_chars = dict()
+
+            selected_chars[form.chars.data] = {'map' : form.maps.data}
+            session['selected_chars'] = selected_chars
 
     return render_template('logged.html', title="Zalogowany", form=form)
